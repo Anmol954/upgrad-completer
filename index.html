@@ -1,1 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Chattees Biradri — upGrad Completer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;padding:20px}
+h1{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.badge{font-size:0.68rem;background:#312e81;color:#a5b4fc;padding:2px 10px;border-radius:20px;font-weight:600}
+.sub{font-size:0.8rem;color:#475569;margin-bottom:24px}
+.wrap{max-width:960px;margin:0 auto}
+.steps{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.step{flex:1;min-width:220px;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px}
+.step.active{border-color:#6366f1;background:#1e1b4b}
+.step.done{border-color:#14532d;background:#052e16}
+.step-num{font-size:0.68rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.step.active .step-num{color:#a5b4fc}
+.step.done .step-num{color:#86efac}
+label{font-size:0.8rem;color:#94a3b8;display:block;margin-bottom:5px;margin-top:12px}
+label:first-of-type{margin-top:0}
+input{width:100%;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:9px 11px;color:#e2e8f0;font-size:0.85rem;outline:none;transition:border .2s}
+input:focus{border-color:#6366f1}
+input:disabled{opacity:.4}
+.btn{width:100%;padding:10px;border:none;border-radius:8px;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn-indigo{background:#6366f1;color:#fff}.btn-indigo:hover:not(:disabled){background:#4f46e5}
+.btn-green{background:#15803d;color:#fff}.btn-green:hover:not(:disabled){background:#166534}
+.btn-slate{background:#334155;color:#cbd5e1}.btn-slate:hover:not(:disabled){background:#475569}
+.msg{font-size:0.8rem;margin-top:8px;padding:8px 10px;border-radius:6px;display:none}
+.msg.show{display:block}
+.msg.err{background:#1c0a0a;border:1px solid #7f1d1d;color:#fca5a5}
+.msg.ok{background:#052e16;border:1px solid #14532d;color:#86efac}
+.msg.info{background:#0c1929;border:1px solid #1e3a5f;color:#93c5fd}
+.main-grid{display:none;grid-template-columns:280px 1fr;gap:16px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px}
+.sec-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:14px}
+.user-bar{display:none;align-items:center;gap:12px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+.avatar{width:36px;height:36px;border-radius:50%;background:#312e81;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a5b4fc;font-size:1rem;flex-shrink:0}
+.uname{font-size:.88rem;font-weight:600}
+.uemail{font-size:.73rem;color:#64748b}
+.logout-btn{margin-left:auto;background:none;border:1px solid #334155;color:#94a3b8;border-radius:6px;padding:4px 12px;font-size:.75rem;cursor:pointer}
+.logout-btn:hover{border-color:#ef4444;color:#fca5a5}
+.course-item{padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid #334155;font-size:.84rem;transition:all .2s}
+.course-item:hover{border-color:#6366f1;background:#1e1b4b}
+.course-item.sel{border-color:#6366f1;background:#1e1b4b;font-weight:600;color:#a5b4fc}
+.cprog{font-size:.7rem;color:#64748b;margin-top:3px}
+.pbar{height:3px;background:#0f172a;border-radius:2px;margin-top:5px;overflow:hidden}
+.pfill{height:100%;background:#6366f1;border-radius:2px}
+.action-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.action-bar .btn{width:auto;padding:7px 14px;margin-top:0;font-size:.78rem}
+.count-badge{font-size:.78rem;color:#64748b;margin-left:auto}
+.mgroup{margin-bottom:14px}
+.gname{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748b;padding:4px 0;border-bottom:1px solid #1e293b;margin-bottom:6px}
+.mrow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:3px;cursor:pointer;border:1px solid transparent;transition:all .2s;font-size:.83rem}
+.mrow:hover{background:#0f172a;border-color:#334155}
+.mcb{flex-shrink:0;width:16px;height:16px;accent-color:#6366f1;cursor:pointer}
+.mname{flex:1;line-height:1.3}
+.mseg{font-size:.68rem;color:#64748b;margin-top:1px}
+.mprog{font-size:.68rem;flex-shrink:0;padding:2px 8px;border-radius:10px;background:#0f172a;color:#64748b}
+.mprog.done{background:#052e16;color:#86efac}
+.mprog.part{background:#1c1207;color:#fcd34d}
+.result-list{margin-top:12px;max-height:260px;overflow-y:auto}
+.ri{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;margin-bottom:4px;font-size:.79rem;background:#0f172a;border:1px solid #1e293b}
+.ri.ok{border-color:#14532d;background:#052e16}
+.ri.er{border-color:#7f1d1d;background:#1c0a0a}
+.ri.ru{border-color:#1e3a5f;background:#0c1929}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dg{background:#22c55e}.dr{background:#ef4444}.db{background:#3b82f6;animation:p 1s infinite}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid #334155;border-top-color:#6366f1;border-radius:50%;animation:s .6s linear infinite;flex-shrink:0}
+@keyframes s{to{transform:rotate(360deg)}}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>⚡ Chattees Biradri <span class="badge">upGrad Auto-Completer</span></h1>
+  <p class="sub">Login once. Select modules. Mark complete — no video watching needed.</p>
 
+  <div class="user-bar" id="ubar">
+    <div class="avatar" id="uinit">?</div>
+    <div><div class="uname" id="uname">—</div><div class="uemail" id="uemail">—</div></div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-area">
+    <div class="steps">
+      <div class="step active" id="s1">
+        <div class="step-num">Step 1 — Phone Number</div>
+        <label>Mobile Number (with country code)</label>
+        <input type="tel" id="phone" placeholder="+91 9876543210" onkeydown="if(event.key==='Enter')sendOtp()"/>
+        <button class="btn btn-indigo" id="otp-btn" onclick="sendOtp()">Send OTP</button>
+        <div class="msg" id="m1"></div>
+      </div>
+      <div class="step" id="s2">
+        <div class="step-num">Step 2 — Verify OTP</div>
+        <label>OTP sent to your phone</label>
+        <input type="number" id="otp" placeholder="Enter OTP" disabled onkeydown="if(event.key==='Enter')verifyOtp()"/>
+        <button class="btn btn-indigo" id="ver-btn" onclick="verifyOtp()" disabled>Verify &amp; Login</button>
+        <div class="msg" id="m2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="main-grid" id="main-area">
+    <div>
+      <div class="card">
+        <div class="sec-title">Your Enrolled Courses</div>
+        <div id="course-list"><span class="spinner"></span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="sec-title" id="mod-title">← Select a course</div>
+        <div id="no-sel" style="color:#475569;font-size:.82rem">Click a course to load its modules.</div>
+        <div id="mod-area" style="display:none">
+          <div class="action-bar">
+            <button class="btn btn-slate" onclick="selAll(true)">☑ All</button>
+            <button class="btn btn-slate" onclick="selAll(false)">☐ None</button>
+            <button class="btn btn-slate" onclick="selIncomplete()">⏳ Incomplete</button>
+            <span class="count-badge" id="sel-ct">0 selected</span>
+          </div>
+          <div id="mod-list"></div>
+          <button class="btn btn-green" id="go-btn" onclick="runComplete()" disabled>🚀 Mark Selected Complete</button>
+          <div class="result-list" id="res-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let AUTH = {token:null,sessionId:null,userId:null};
+let regId = null;
+let curCourseId = null;
+let modules = [];
+
+function saveAuth(){localStorage.setItem('ug_auth2',JSON.stringify(AUTH));}
+function loadAuth(){const s=localStorage.getItem('ug_auth2');if(s){AUTH=JSON.parse(s);return!!AUTH.token;}return false;}
+function logout(){localStorage.removeItem('ug_auth2');AUTH={token:null,sessionId:null,userId:null};location.reload();}
+
+async function req(method,url,body,extra={}){
+  const h={'Content-Type':'application/json;charset=UTF-8','accept':'application/json, text/plain, */*','origin':'https://learn.upgrad.com','referer':'https://learn.upgrad.com/',...extra};
+  if(AUTH.token) h['auth-token']=AUTH.token;
+  if(AUTH.sessionId) h['sessionid']=AUTH.sessionId;
+  const opts={method,headers:h};
+  if(body) opts.body=JSON.stringify(body);
+  const res=await fetch(url,opts);
+  const t=res.headers.get('auth-token');
+  if(t){AUTH.token=t;saveAuth();}
+  return res;
+}
+
+function msg(id,text,type){const e=document.getElementById(id);e.textContent=text;e.className='msg show '+type;}
+function setLoad(id,on,txt){const b=document.getElementById(id);b.disabled=on;b.innerHTML=on?'<span class="spinner"></span> '+txt:txt;}
+
+async function sendOtp(){
+  let p=document.getElementById('phone').value.trim();
+  if(!p)return msg('m1','Enter your phone number.','err');
+  if(!p.startsWith('+'))p='+91'+p.replace(/\D/g,'').slice(-10);
+  setLoad('otp-btn',true,'Sending...');
+  try{
+    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/registration/phone',{phoneNumber:p});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.message||'Failed');
+    regId=d.registrationId;
+    msg('m1','✅ OTP sent to '+p,'ok');
+    document.getElementById('otp').disabled=false;
+    document.getElementById('ver-btn').disabled=false;
+    document.getElementById('otp').focus();
+    document.getElementById('s2').classList.add('active');
+  }catch(e){msg('m1','❌ '+e.message,'err');}
+  setLoad('otp-btn',false,'Send OTP');
+}
+
+async function verifyOtp(){
+  const otp=parseInt(document.getElementById('otp').value.trim());
+  if(!otp)return msg('m2','Enter the OTP.','err');
+  setLoad('ver-btn',true,'Verifying...');
+  try{
+    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp});
+    if(!r.ok){const d=await r.json();throw new Error(d.message||'Invalid OTP');}
+    await r.json(); // token captured in req()
+    // Get user info + sessionid
+    const r2=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
+    if(!r2.ok)throw new Error('Could not fetch user info');
+    const me=await r2.json();
+    const user=me.user||me;
+    AUTH.userId=String(user.id||user.userId||'');
+    // Try to get sessionid from cookie (works if same origin, may not in file://)
+    const ck=document.cookie;
+    const sm=ck.match(/sessionid=([^;]+)/i);
+    if(sm)AUTH.sessionId=sm[1];
+    saveAuth();
+    msg('m2','✅ Welcome, '+(user.firstname||user.name||'User')+'!','ok');
+    setTimeout(()=>showApp(user),500);
+  }catch(e){msg('m2','❌ '+e.message,'err');}
+  setLoad('ver-btn',false,'Verify & Login');
+}
+
+async function showApp(user){
+  document.getElementById('login-area').style.display='none';
+  document.getElementById('main-area').style.display='grid';
+  const ub=document.getElementById('ubar');ub.style.display='flex';
+  const name=(user.firstname?(user.firstname+' '+(user.lastname||'')):user.name||'User').trim();
+  document.getElementById('uname').textContent=name;
+  document.getElementById('uemail').textContent=user.email||'';
+  document.getElementById('uinit').textContent=name[0].toUpperCase();
+  loadCourses();
+}
+
+async function loadCourses(){
+  const cl=document.getElementById('course-list');
+  cl.innerHTML='<span class="spinner"></span>';
+  try{
+    const [er,pr]=await Promise.all([
+      req('GET','https://prod-learn-api.upgrad.com/apis/v3/enrollments?platform=web-learn-lite&pageNo=1&pageSize=20&enrolmentStatus=ALL'),
+      req('GET',`https://learnerprogress.upgrad.com/progress/courses?userId=${AUTH.userId}`)
+    ]);
+    const enrolls=await er.json();
+    const progs=await pr.json();
+    cl.innerHTML='';
+    if(!Array.isArray(enrolls)||!enrolls.length){cl.innerHTML='<div style="color:#475569;font-size:.82rem">No courses found.</div>';return;}
+    enrolls.forEach(e=>{
+      const c=e.course||e;
+      const p=progs[c.id]?Math.round(progs[c.id].userProgress):0;
+      const d=document.createElement('div');
+      d.className='course-item';d.dataset.id=c.id;
+      d.innerHTML=`<div style="font-weight:600">${c.name||'Course '+c.id}</div><div class="cprog">${p}% complete</div><div class="pbar"><div class="pfill" style="width:${p}%"></div></div>`;
+      d.onclick=()=>selectCourse(c.id,c.name,d);
+      cl.appendChild(d);
+    });
+  }catch(e){cl.innerHTML='<div style="color:#fca5a5;font-size:.82rem">❌ '+e.message+'</div>';}
+}
+
+async function selectCourse(cid,cname,el){
+  document.querySelectorAll('.course-item').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  curCourseId=cid;
+  document.getElementById('no-sel').style.display='none';
+  document.getElementById('mod-area').style.display='block';
+  document.getElementById('mod-title').textContent=cname||'Modules';
+  document.getElementById('mod-list').innerHTML='<span class="spinner"></span> Loading...';
+  document.getElementById('res-list').innerHTML='';
+  document.getElementById('go-btn').disabled=true;
+  try{
+    const mgr=await req('GET',`https://prod-learn-api.upgrad.com/apis/v2/modulegroups?courseId=${cid}&specialisationKey=${cid}_default`);
+    const mgs=await mgr.json();
+    // Collect all module ids included in progress
+    const mids=[];
+    mgs.forEach(g=>(g.modules||[]).forEach(m=>{if(m.isPublished)mids.push(m.id);}));
+    // Fetch segment progress in parallel (batches of 5)
+    const progMap={};
+    for(let i=0;i<mids.length;i+=5){
+      const batch=mids.slice(i,i+5);
+      await Promise.all(batch.map(async mid=>{
+        try{const r=await req('GET',`https://learnerprogress.upgrad.com/progress/module/${mid}?courseId=${cid}&level=segment&userId=${AUTH.userId}`);progMap[mid]=await r.json();}
+        catch{progMap[mid]=null;}
+      }));
+    }
+    modules=[];
+    mgs.forEach(g=>{
+      (g.modules||[]).forEach(m=>{
+        if(!m.isPublished)return;
+        const p=progMap[m.id];
+        const segs=[];
+        if(p&&p.sessions)p.sessions.forEach(s=>(s.segments||[]).forEach(sg=>segs.push({id:sg.id,done:sg.isSegmentComplete})));
+        modules.push({id:m.id,name:m.name,group:g.name,pct:p?Math.round(p.userProgress||0):0,segs,included:m.isIncludedInProgress});
+      });
+    });
+    renderModules();
+  }catch(e){document.getElementById('mod-list').innerHTML='<div style="color:#fca5a5;font-size:.82rem">❌ '+e.message+'</div>';}
+}
+
+function renderModules(){
+  const c=document.getElementById('mod-list');c.innerHTML='';
+  const groups={};
+  modules.forEach(m=>{if(!groups[m.group])groups[m.group]=[];groups[m.group].push(m);});
+  Object.entries(groups).forEach(([g,ms])=>{
+    const gd=document.createElement('div');gd.className='mgroup';
+    gd.innerHTML=`<div class="gname">${g}</div>`;
+    ms.forEach(m=>{
+      const pc=m.pct===100?'done':m.pct>0?'part':'';
+      const pt=m.pct===100?'✅ Done':m.pct>0?m.pct+'%':'0%';
+      const incomplete=m.segs.filter(s=>!s.done).length;
+      const row=document.createElement('div');row.className='mrow';row.dataset.id=m.id;
+      row.innerHTML=`<input class="mcb" type="checkbox" data-id="${m.id}" onchange="updateCt()"/><div class="mname">${m.name}<div class="mseg">${m.segs.length} segments · ${incomplete} remaining</div></div><div class="mprog ${pc}">${pt}</div>`;
+      row.onclick=e=>{if(e.target.type==='checkbox')return;const cb=row.querySelector('.mcb');cb.checked=!cb.checked;updateCt();};
+      gd.appendChild(row);
+    });
+    c.appendChild(gd);
+  });
+  updateCt();
+}
+
+function updateCt(){
+  const n=document.querySelectorAll('.mcb:checked').length;
+  document.getElementById('sel-ct').textContent=n+' selected';
+  document.getElementById('go-btn').disabled=n===0;
+}
+function selAll(v){document.querySelectorAll('.mcb').forEach(c=>c.checked=v);updateCt();}
+function selIncomplete(){
+  document.querySelectorAll('.mcb').forEach(cb=>{
+    const m=modules.find(x=>x.id===parseInt(cb.dataset.id));
+    cb.checked=m&&m.pct<100;
+  });
+  updateCt();
+}
+
+async function runComplete(){
+  const sel=Array.from(document.querySelectorAll('.mcb:checked')).map(c=>modules.find(m=>m.id===parseInt(c.dataset.id))).filter(Boolean);
+  if(!sel.length)return;
+  const btn=document.getElementById('go-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Working...';
+  const rl=document.getElementById('res-list');rl.innerHTML='';
+
+  for(const mod of sel){
+    const todo=mod.segs.filter(s=>!s.done);
+    const row=document.createElement('div');
+    row.className='ri ru';
+    row.innerHTML=`<div class="dot db"></div><span><b>${mod.name}</b> — 0/${todo.length} segments...</span>`;
+    rl.appendChild(row);rl.scrollTop=rl.scrollHeight;
+
+    let ok=0,fail=0;
+    for(const seg of todo){
+      try{
+        const r=await req('PUT',`https://learnerprogress.upgrad.com/progress?userId=${AUTH.userId}`,
+          {completed:true,componentId:seg.id,percentComplete:100},
+          {courseid:String(curCourseId)});
+        const d=await r.json();
+        if(d.completed===true||d.isSegmentComplete===true)ok++;
+        else fail++;
+      }catch{fail++;}
+      row.querySelector('span').innerHTML=`<b>${mod.name}</b> — ${ok}/${todo.length} segments done`;
+      await new Promise(r=>setTimeout(r,120));
+    }
+    row.className='ri '+(fail===0?'ok':'er');
+    row.innerHTML=fail===0
+      ?`<div class="dot dg"></div><span>✅ <b>${mod.name}</b> — all ${todo.length} segments complete</span>`
+      :`<div class="dot dr"></div><span>⚠️ <b>${mod.name}</b> — ${ok} ok, ${fail} failed</span>`;
+  }
+
+  btn.disabled=false;btn.innerHTML='🚀 Mark Selected Complete';
+  // Refresh
+  setTimeout(()=>{
+    const el=document.querySelector('.course-item.sel');
+    if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);
+  },1000);
+}
+
+// Auto-login if token saved
+(async()=>{
+  if(loadAuth()&&AUTH.token){
+    try{
+      const r=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
+      if(r.ok){const me=await r.json();const u=me.user||me;AUTH.userId=String(u.id||AUTH.userId);saveAuth();document.getElementById('login-area').style.display='none';showApp(u);return;}
+    }catch{}
+  }
+})();
+</script>
+</body>
+</html>
