@@ -141,13 +141,16 @@ function saveAuth(){localStorage.setItem('ug_auth2',JSON.stringify(AUTH));}
 function loadAuth(){const s=localStorage.getItem('ug_auth2');if(s){AUTH=JSON.parse(s);return!!AUTH.token;}return false;}
 function logout(){localStorage.removeItem('ug_auth2');AUTH={token:null,sessionId:null,userId:null};location.reload();}
 
+const PROXY='https://upgrad-proxy.anmolmadhav2004.workers.dev';
+function proxyUrl(url){return PROXY+'?url='+encodeURIComponent(url);}
+
 async function req(method,url,body,extra={}){
-  const h={'Content-Type':'application/json;charset=UTF-8','accept':'application/json, text/plain, */*','origin':'https://learn.upgrad.com','referer':'https://learn.upgrad.com/',...extra};
+  const h={'Content-Type':'application/json;charset=UTF-8','accept':'application/json, text/plain, */*',...extra};
   if(AUTH.token) h['auth-token']=AUTH.token;
   if(AUTH.sessionId) h['sessionid']=AUTH.sessionId;
   const opts={method,headers:h};
   if(body) opts.body=JSON.stringify(body);
-  const res=await fetch(url,opts);
+  const res=await fetch(proxyUrl(url),opts);
   const t=res.headers.get('auth-token');
   if(t){AUTH.token=t;saveAuth();}
   return res;
