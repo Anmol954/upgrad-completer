@@ -83,7 +83,6 @@ input:disabled{opacity:.4}
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
-  <!-- LOGIN -->
   <div id="login-area">
     <div class="steps">
       <div class="step active" id="s1">
@@ -103,7 +102,6 @@ input:disabled{opacity:.4}
     </div>
   </div>
 
-  <!-- MAIN APP -->
   <div class="main-grid" id="main-area">
     <div>
       <div class="card">
@@ -166,8 +164,14 @@ async function sendOtp(){
   setLoad('otp-btn',true,'Sending...');
   try{
     const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/registration/phone',{phoneNumber:p});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.message||'Failed');
+    
+    // SAFE PARSING
+    const text = await r.text();
+    let d = {};
+    try { d = text ? JSON.parse(text) : {}; } catch(e) {}
+
+    if(!r.ok)throw new Error(d.message || `Server returned ${r.status}`);
+    
     regId=d.registrationId;
     msg('m1','✅ OTP sent to '+p,'ok');
     document.getElementById('otp').disabled=false;
@@ -184,15 +188,20 @@ async function verifyOtp(){
   setLoad('ver-btn',true,'Verifying...');
   try{
     const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp: parseInt(otpVal,10)});
-    if(!r.ok){const d=await r.json();throw new Error(d.message||'Invalid OTP');}
-    await r.json(); // token captured in req()
-    // Get user info + sessionid
+    
+    // SAFE PARSING
+    const text = await r.text();
+    let d = {};
+    try { d = text ? JSON.parse(text) : {}; } catch(e) {}
+
+    if(!r.ok)throw new Error(d.message || `Server returned ${r.status}`);
+    
     const r2=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
     if(!r2.ok)throw new Error('Could not fetch user info');
     const me=await r2.json();
     const user=me.user||me;
     AUTH.userId=String(user.id||user.userId||'');
-    // Try to get sessionid from cookie (works if same origin, may not in file://)
+    
     const ck=document.cookie;
     const sm=ck.match(/sessionid=([^;]+)/i);
     if(sm)AUTH.sessionId=sm[1];
@@ -251,10 +260,8 @@ async function selectCourse(cid,cname,el){
   try{
     const mgr=await req('GET',`https://prod-learn-api.upgrad.com/apis/v2/modulegroups?courseId=${cid}&specialisationKey=${cid}_default`);
     const mgs=await mgr.json();
-    // Collect all module ids included in progress
     const mids=[];
     mgs.forEach(g=>(g.modules||[]).forEach(m=>{if(m.isPublished)mids.push(m.id);}));
-    // Fetch segment progress in parallel (batches of 5)
     const progMap={};
     for(let i=0;i<mids.length;i+=5){
       const batch=mids.slice(i,i+5);
@@ -332,8 +339,13 @@ async function runComplete(){
         const r=await req('PUT',`https://learnerprogress.upgrad.com/progress?userId=${AUTH.userId}`,
           {completed:true,componentId:seg.id,percentComplete:100},
           {courseid:String(curCourseId)});
-        const d=await r.json();
-        if(d.completed===true||d.isSegmentComplete===true)ok++;
+          
+        // SAFE PARSING
+        const text = await r.text();
+        let d = {};
+        try { d = text ? JSON.parse(text) : {}; } catch(e) {}
+
+        if(r.ok && (d.completed===true||d.isSegmentComplete===true))ok++;
         else fail++;
       }catch{fail++;}
       row.querySelector('span').innerHTML=`<b>${mod.name}</b> — ${ok}/${todo.length} segments done`;
@@ -346,14 +358,12 @@ async function runComplete(){
   }
 
   btn.disabled=false;btn.innerHTML='🚀 Mark Selected Complete';
-  // Refresh
   setTimeout(()=>{
     const el=document.querySelector('.course-item.sel');
     if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);
   },1000);
 }
 
-// Auto-login if token saved
 (async()=>{
   if(loadAuth()&&AUTH.token){
     try{
