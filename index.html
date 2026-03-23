@@ -2,154 +2,420 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<title>Chattees Biradri — upGrad Completer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CB // upGrad Completer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
+:root{
+  --bg:#080c14;
+  --surface:#0d1422;
+  --border:#1a2540;
+  --accent:#00f5c4;
+  --accent2:#7c3aed;
+  --red:#ff4d6d;
+  --yellow:#ffd60a;
+  --text:#ccd6f6;
+  --muted:#4a5568;
+  --glow:0 0 20px rgba(0,245,196,.15);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;padding:20px}
-h1{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.badge{font-size:0.68rem;background:#312e81;color:#a5b4fc;padding:2px 10px;border-radius:20px;font-weight:600}
-.sub{font-size:0.8rem;color:#475569;margin-bottom:24px}
-.wrap{max-width:960px;margin:0 auto}
-.steps{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-.step{flex:1;min-width:220px;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px}
-.step.active{border-color:#6366f1;background:#1e1b4b}
-.step.done{border-color:#14532d;background:#052e16}
-.step-num{font-size:0.68rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-.step.active .step-num{color:#a5b4fc}
-.step.done .step-num{color:#86efac}
-label{font-size:0.8rem;color:#94a3b8;display:block;margin-bottom:5px;margin-top:12px}
-label:first-of-type{margin-top:0}
-input{width:100%;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:9px 11px;color:#e2e8f0;font-size:0.85rem;outline:none;transition:border .2s}
-input:focus{border-color:#6366f1}
-input:disabled{opacity:.4}
-.btn{width:100%;padding:10px;border:none;border-radius:8px;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn:disabled{opacity:.35;cursor:not-allowed}
-.btn-indigo{background:#6366f1;color:#fff}.btn-indigo:hover:not(:disabled){background:#4f46e5}
-.btn-green{background:#15803d;color:#fff}.btn-green:hover:not(:disabled){background:#166534}
-.btn-slate{background:#334155;color:#cbd5e1}.btn-slate:hover:not(:disabled){background:#475569}
-.msg{font-size:0.8rem;margin-top:8px;padding:8px 10px;border-radius:6px;display:none}
-.msg.show{display:block}
-.msg.err{background:#1c0a0a;border:1px solid #7f1d1d;color:#fca5a5}
-.msg.ok{background:#052e16;border:1px solid #14532d;color:#86efac}
-.msg.info{background:#0c1929;border:1px solid #1e3a5f;color:#93c5fd}
-.main-grid{display:none;grid-template-columns:280px 1fr;gap:16px}
-.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px}
-.sec-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:14px}
-.user-bar{display:none;align-items:center;gap:12px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px 16px;margin-bottom:20px}
-.avatar{width:36px;height:36px;border-radius:50%;background:#312e81;display:flex;align-items:center;justify-content:center;font-weight:700;color:#a5b4fc;font-size:1rem;flex-shrink:0}
-.uname{font-size:.88rem;font-weight:600}
-.uemail{font-size:.73rem;color:#64748b}
-.logout-btn{margin-left:auto;background:none;border:1px solid #334155;color:#94a3b8;border-radius:6px;padding:4px 12px;font-size:.75rem;cursor:pointer}
-.logout-btn:hover{border-color:#ef4444;color:#fca5a5}
-.course-item{padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid #334155;font-size:.84rem;transition:all .2s}
-.course-item:hover{border-color:#6366f1;background:#1e1b4b}
-.course-item.sel{border-color:#6366f1;background:#1e1b4b;font-weight:600;color:#a5b4fc}
-.cprog{font-size:.7rem;color:#64748b;margin-top:3px}
-.pbar{height:3px;background:#0f172a;border-radius:2px;margin-top:5px;overflow:hidden}
-.pfill{height:100%;background:#6366f1;border-radius:2px}
-.action-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.action-bar .btn{width:auto;padding:7px 14px;margin-top:0;font-size:.78rem}
-.count-badge{font-size:.78rem;color:#64748b;margin-left:auto}
-.mgroup{margin-bottom:14px}
-.gname{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748b;padding:4px 0;border-bottom:1px solid #1e293b;margin-bottom:6px}
-.mrow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:3px;cursor:pointer;border:1px solid transparent;transition:all .2s;font-size:.83rem}
-.mrow:hover{background:#0f172a;border-color:#334155}
-.mcb{flex-shrink:0;width:16px;height:16px;accent-color:#6366f1;cursor:pointer}
-.mname{flex:1;line-height:1.3}
-.mseg{font-size:.68rem;color:#64748b;margin-top:1px}
-.mprog{font-size:.68rem;flex-shrink:0;padding:2px 8px;border-radius:10px;background:#0f172a;color:#64748b}
-.mprog.done{background:#052e16;color:#86efac}
-.mprog.part{background:#1c1207;color:#fcd34d}
-.result-list{margin-top:12px;max-height:260px;overflow-y:auto}
-.ri{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;margin-bottom:4px;font-size:.79rem;background:#0f172a;border:1px solid #1e293b}
-.ri.ok{border-color:#14532d;background:#052e16}
-.ri.er{border-color:#7f1d1d;background:#1c0a0a}
-.ri.ru{border-color:#1e3a5f;background:#0c1929}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.dg{background:#22c55e}.dr{background:#ef4444}.db{background:#3b82f6;animation:p 1s infinite}
-.spinner{display:inline-block;width:13px;height:13px;border:2px solid #334155;border-top-color:#6366f1;border-radius:50%;animation:s .6s linear infinite;flex-shrink:0}
-@keyframes s{to{transform:rotate(360deg)}}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+html{scroll-behavior:smooth}
+body{
+  font-family:'JetBrains Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* Animated grid background */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,196,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,245,196,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Glow orbs */
+body::after{
+  content:'';
+  position:fixed;
+  top:-200px;right:-200px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(124,58,237,.12) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{max-width:1100px;margin:0 auto;padding:24px;position:relative;z-index:1;}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{
+  width:42px;height:42px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:800;color:#000;
+  font-family:'Syne',sans-serif;
+  box-shadow:0 0 20px rgba(0,245,196,.3);
+}
+.logo-text{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.02em;}
+.logo-text span{color:var(--accent);}
+.logo-sub{font-size:.65rem;color:var(--muted);margin-top:2px;letter-spacing:.1em;text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.status-txt{font-size:.7rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;}
+
+/* User bar */
+#ubar{
+  display:none;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:12px 18px;margin-bottom:28px;
+  position:relative;overflow:hidden;
+}
+#ubar::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent2));
+}
+.avatar{
+  width:38px;height:38px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0;
+}
+.uinfo{flex:1;}
+.uname{font-size:.88rem;font-weight:700;color:#fff;}
+.uemail{font-size:.7rem;color:var(--muted);margin-top:1px;}
+.logout-btn{
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);border-radius:6px;padding:5px 12px;
+  font-size:.72rem;cursor:pointer;font-family:inherit;
+  transition:all .2s;letter-spacing:.05em;text-transform:uppercase;
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* Login area */
+#login-area{animation:fadeUp .5s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.login-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto;}
+@media(max-width:600px){.login-grid{grid-template-columns:1fr;}}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:28px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s;
+}
+.panel.active{border-color:rgba(0,245,196,.4);box-shadow:var(--glow);}
+.panel::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,245,196,.3),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.panel.active::after{opacity:1;}
+
+.panel-num{
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.panel-num::before{
+  content:'';display:inline-block;width:20px;height:1px;background:var(--accent);
+}
+.panel-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:20px;color:#fff;}
+
+label{font-size:.7rem;color:var(--muted);display:block;margin-bottom:6px;margin-top:16px;letter-spacing:.08em;text-transform:uppercase;}
+label:first-of-type{margin-top:0;}
+
+input{
+  width:100%;
+  background:#060a12;
+  border:1px solid var(--border);
+  border-radius:8px;padding:11px 14px;
+  color:#fff;font-size:.88rem;
+  outline:none;transition:all .2s;
+  font-family:'JetBrains Mono',monospace;
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,245,196,.1);}
+input:disabled{opacity:.3;}
+input::placeholder{color:var(--muted);}
+
+.btn{
+  width:100%;padding:12px;border:none;border-radius:8px;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  transition:all .25s;margin-top:14px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase;
+}
+.btn:disabled{opacity:.3;cursor:not-allowed;}
+.btn-accent{
+  background:var(--accent);color:#000;
+  box-shadow:0 0 20px rgba(0,245,196,.2);
+}
+.btn-accent:hover:not(:disabled){
+  background:#00ffd0;box-shadow:0 0 30px rgba(0,245,196,.4);transform:translateY(-1px);
+}
+.btn-purple{
+  background:var(--accent2);color:#fff;
+  box-shadow:0 0 20px rgba(124,58,237,.2);
+}
+.btn-purple:hover:not(:disabled){
+  background:#6d28d9;box-shadow:0 0 30px rgba(124,58,237,.4);transform:translateY(-1px);
+}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+}
+.btn-ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+
+.msg{font-size:.75rem;margin-top:10px;padding:10px 12px;border-radius:7px;display:none;line-height:1.5;}
+.msg.show{display:block;}
+.msg.err{background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.3);color:#ff8099;}
+.msg.ok{background:rgba(0,245,196,.06);border:1px solid rgba(0,245,196,.25);color:var(--accent);}
+.msg.info{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.3);color:#a78bfa;}
+
+/* Main dashboard */
+#main-area{display:none;grid-template-columns:300px 1fr;gap:20px;animation:fadeUp .4s ease;}
+@media(max-width:800px){#main-area{grid-template-columns:1fr;}}
+
+.sidebar-panel,.content-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:22px;
+}
+.sec-label{
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.sec-label::before{content:'//';color:var(--muted);}
+
+/* Course items */
+.course-item{
+  padding:12px 14px;border-radius:10px;cursor:pointer;
+  margin-bottom:8px;border:1px solid var(--border);
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.course-item:hover{border-color:rgba(0,245,196,.3);background:rgba(0,245,196,.03);}
+.course-item.sel{
+  border-color:var(--accent);background:rgba(0,245,196,.05);
+}
+.course-item.sel::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--accent);
+}
+.cname{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.cpct{font-size:.68rem;color:var(--muted);margin-bottom:6px;}
+.pbar{height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .5s ease;}
+
+/* Modules */
+.mod-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.mod-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#fff;}
+
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.chip{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:6px;padding:5px 12px;font-size:.7rem;cursor:pointer;
+  font-family:inherit;transition:all .2s;letter-spacing:.05em;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.sel-count{font-size:.7rem;color:var(--muted);margin-left:auto;align-self:center;}
+
+.mgroup{margin-bottom:18px;}
+.gname{
+  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding-bottom:8px;margin-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+.mrow{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:8px;margin-bottom:4px;
+  cursor:pointer;border:1px solid transparent;
+  transition:all .2s;
+}
+.mrow:hover{background:rgba(255,255,255,.02);border-color:var(--border);}
+.mcb{
+  flex-shrink:0;width:16px;height:16px;
+  accent-color:var(--accent);cursor:pointer;
+}
+.mname{flex:1;font-size:.8rem;line-height:1.4;}
+.mseg{font-size:.65rem;color:var(--muted);margin-top:2px;}
+.mprog{
+  font-size:.65rem;flex-shrink:0;padding:3px 9px;
+  border-radius:20px;font-weight:700;letter-spacing:.05em;
+}
+.mprog.done{background:rgba(0,245,196,.1);color:var(--accent);border:1px solid rgba(0,245,196,.2);}
+.mprog.part{background:rgba(255,214,10,.08);color:var(--yellow);border:1px solid rgba(255,214,10,.2);}
+.mprog.zero{background:rgba(255,77,109,.06);color:#ff8099;border:1px solid rgba(255,77,109,.15);}
+
+/* Go button */
+.go-btn{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#000;border:none;border-radius:10px;
+  padding:14px;width:100%;font-size:.85rem;font-weight:700;
+  cursor:pointer;margin-top:16px;font-family:inherit;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:all .3s;box-shadow:0 0 30px rgba(0,245,196,.15);
+}
+.go-btn:hover:not(:disabled){
+  box-shadow:0 0 40px rgba(0,245,196,.35);transform:translateY(-2px);
+}
+.go-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;}
+
+/* Results */
+.res-list{margin-top:14px;max-height:280px;overflow-y:auto;}
+.res-list::-webkit-scrollbar{width:4px;}
+.res-list::-webkit-scrollbar-track{background:transparent;}
+.res-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.ri{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:8px;margin-bottom:4px;
+  font-size:.75rem;border:1px solid transparent;
+}
+.ri.ok{background:rgba(0,245,196,.05);border-color:rgba(0,245,196,.2);color:var(--accent);}
+.ri.er{background:rgba(255,77,109,.05);border-color:rgba(255,77,109,.2);color:#ff8099;}
+.ri.ru{background:rgba(124,58,237,.05);border-color:rgba(124,58,237,.2);color:#a78bfa;}
+
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dg{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.dr{background:var(--red);}
+.db{background:#a78bfa;animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.spinner{
+  display:inline-block;width:13px;height:13px;
+  border:2px solid var(--border);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-state{
+  text-align:center;padding:40px 20px;color:var(--muted);
+  font-size:.8rem;line-height:2;
+}
+.empty-icon{font-size:2rem;margin-bottom:12px;display:block;opacity:.4;}
+
+/* Terminal cursor blink on inputs */
+input:focus{caret-color:var(--accent);}
+
+/* Scrollbar */
+*::-webkit-scrollbar{width:6px;}
+*::-webkit-scrollbar-track{background:transparent;}
+*::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>⚡ Chattees Biradri <span class="badge">upGrad Auto-Completer</span></h1>
-  <p class="sub">Login once. Select modules. Mark complete — no video watching needed.</p>
 
-  <div class="user-bar" id="ubar">
-    <div class="avatar" id="uinit">?</div>
-    <div><div class="uname" id="uname">—</div><div class="uemail" id="uemail">—</div></div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">CB</div>
+      <div>
+        <div class="logo-text"><span>Chattees</span> Biradri</div>
+        <div class="logo-sub">upGrad Auto-Completer v2.0</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-dot"></div>
+      <div class="status-txt">System Online</div>
+    </div>
   </div>
 
-  <!-- LOGIN -->
+  <!-- User bar -->
+  <div id="ubar">
+    <div class="avatar" id="uinit">?</div>
+    <div class="uinfo">
+      <div class="uname" id="uname">—</div>
+      <div class="uemail" id="uemail">—</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">[ Logout ]</button>
+  </div>
+
+  <!-- Login -->
   <div id="login-area">
-    <div class="steps">
-      <div class="step active" id="s1">
-        <div class="step-num">Step 1 — Phone Number</div>
-        <label>Mobile Number (with country code)</label>
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:8px;">
+        Complete Modules.<br/><span style="color:var(--accent)">Zero Effort.</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);">Login with your upGrad phone number to get started.</div>
+    </div>
+    <div class="login-grid">
+      <div class="panel active" id="s1">
+        <div class="panel-num">Step 01</div>
+        <div class="panel-title">Phone Number</div>
+        <label>Mobile (with country code)</label>
         <input type="tel" id="phone" placeholder="+91 9876543210" onkeydown="if(event.key==='Enter')sendOtp()"/>
-        <button class="btn btn-indigo" id="otp-btn" onclick="sendOtp()">Send OTP</button>
+        <button class="btn btn-accent" id="otp-btn" onclick="sendOtp()">Send OTP →</button>
         <div class="msg" id="m1"></div>
       </div>
-      <div class="step" id="s2">
-        <div class="step-num">Step 2 — Verify OTP</div>
-        <label>OTP sent to your phone</label>
-        <input type="text" id="otp" placeholder="Enter OTP" maxlength="6" disabled onkeydown="if(event.key==='Enter')verifyOtp()" inputmode="numeric"/>
-        <button class="btn btn-indigo" id="ver-btn" onclick="verifyOtp()" disabled>Verify &amp; Login</button>
+      <div class="panel" id="s2">
+        <div class="panel-num">Step 02</div>
+        <div class="panel-title">Verify OTP</div>
+        <label>Enter OTP sent to your phone</label>
+        <input type="text" id="otp" placeholder="_ _ _ _" maxlength="6" disabled onkeydown="if(event.key==='Enter')verifyOtp()" inputmode="numeric"/>
+        <button class="btn btn-purple" id="ver-btn" onclick="verifyOtp()" disabled>Verify & Access →</button>
         <div class="msg" id="m2"></div>
       </div>
     </div>
   </div>
 
-  <!-- MAIN APP -->
-  <div class="main-grid" id="main-area">
-    <div>
-      <div class="card">
-        <div class="sec-title">Your Enrolled Courses</div>
-        <div id="course-list"><span class="spinner"></span></div>
-      </div>
+  <!-- Main App -->
+  <div id="main-area">
+    <!-- Sidebar -->
+    <div class="sidebar-panel">
+      <div class="sec-label">Enrolled Courses</div>
+      <div id="course-list"><div class="empty-state"><span class="empty-icon">📡</span>Loading courses...</div></div>
     </div>
-    <div>
-      <div class="card">
-        <div class="sec-title" id="mod-title">← Select a course</div>
-        <div id="no-sel" style="color:#475569;font-size:.82rem">Click a course to load its modules.</div>
-        <div id="mod-area" style="display:none">
-          <div class="action-bar">
-            <button class="btn btn-slate" onclick="selAll(true)">☑ All</button>
-            <button class="btn btn-slate" onclick="selAll(false)">☐ None</button>
-            <button class="btn btn-slate" onclick="selIncomplete()">⏳ Incomplete</button>
-            <span class="count-badge" id="sel-ct">0 selected</span>
-          </div>
-          <div id="mod-list"></div>
-          <button class="btn btn-green" id="go-btn" onclick="runComplete()" disabled>🚀 Mark Selected Complete</button>
-          <div class="result-list" id="res-list"></div>
+
+    <!-- Content -->
+    <div class="content-panel">
+      <div id="no-sel" class="empty-state">
+        <span class="empty-icon">←</span>
+        Select a course to load its modules.
+      </div>
+      <div id="mod-area" style="display:none">
+        <div class="mod-header">
+          <div class="mod-title" id="mod-title">Modules</div>
         </div>
+        <div class="action-row">
+          <button class="chip" onclick="selAll(true)">☑ All</button>
+          <button class="chip" onclick="selAll(false)">☐ None</button>
+          <button class="chip" onclick="selIncomplete()">⏳ Incomplete</button>
+          <span class="sel-count" id="sel-ct">0 selected</span>
+        </div>
+        <div id="mod-list"></div>
+        <button class="go-btn" id="go-btn" onclick="runComplete()" disabled>⚡ Mark Selected as Complete</button>
+        <div class="res-list" id="res-list"></div>
       </div>
     </div>
   </div>
+
 </div>
 
 <script>
-let AUTH = {token:null,sessionId:null,userId:null};
-let regId = null;
-let curCourseId = null;
-let modules = [];
+let AUTH={token:null,sessionId:null,userId:null};
+let regId=null,curCourseId=null,modules=[];
 
 function saveAuth(){localStorage.setItem('ug_auth2',JSON.stringify(AUTH));}
 function loadAuth(){const s=localStorage.getItem('ug_auth2');if(s){AUTH=JSON.parse(s);return!!AUTH.token;}return false;}
 function logout(){localStorage.removeItem('ug_auth2');AUTH={token:null,sessionId:null,userId:null};location.reload();}
 
 const PROXY='https://upgrad-proxy.anmolmadhav2004.workers.dev';
-function proxyUrl(url){return PROXY+'?url='+encodeURIComponent(url);}
+function proxyUrl(u){return PROXY+'?url='+encodeURIComponent(u);}
 
 async function req(method,url,body,extra={}){
   const h={'Content-Type':'application/json;charset=UTF-8','accept':'application/json, text/plain, */*',...extra};
-  if(AUTH.token) h['auth-token']=AUTH.token;
-  if(AUTH.sessionId) h['sessionid']=AUTH.sessionId;
+  if(AUTH.token)h['auth-token']=AUTH.token;
+  if(AUTH.sessionId)h['sessionid']=AUTH.sessionId;
   const opts={method,headers:h};
-  if(body) opts.body=JSON.stringify(body);
+  if(body)opts.body=JSON.stringify(body);
   const res=await fetch(proxyUrl(url),opts);
   const t=res.headers.get('auth-token');
   if(t){AUTH.token=t;saveAuth();}
@@ -175,7 +441,7 @@ async function sendOtp(){
     document.getElementById('otp').focus();
     document.getElementById('s2').classList.add('active');
   }catch(e){msg('m1','❌ '+e.message,'err');}
-  setLoad('otp-btn',false,'Send OTP');
+  setLoad('otp-btn',false,'Send OTP →');
 }
 
 async function verifyOtp(){
@@ -183,19 +449,14 @@ async function verifyOtp(){
   if(!otpVal)return msg('m2','Enter the OTP.','err');
   setLoad('ver-btn',true,'Verifying...');
   try{
-    const otpNum = Number(otpVal);
-    // Include registrationId from step 1 in case upGrad requires it
-    const otpBody = regId ? {otp: otpNum, registrationId: regId} : {otp: otpNum};
-    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate', otpBody);
+    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp:Number(otpVal)});
     if(!r.ok){const d=await r.json();throw new Error(d.message||'Invalid OTP');}
-    await r.json(); // token captured in req()
-    // Get user info + sessionid
+    await r.json();
     const r2=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
     if(!r2.ok)throw new Error('Could not fetch user info');
     const me=await r2.json();
     const user=me.user||me;
     AUTH.userId=String(user.id||user.userId||'');
-    // Try to get sessionid from cookie (works if same origin, may not in file://)
     const ck=document.cookie;
     const sm=ck.match(/sessionid=([^;]+)/i);
     if(sm)AUTH.sessionId=sm[1];
@@ -203,7 +464,7 @@ async function verifyOtp(){
     msg('m2','✅ Welcome, '+(user.firstname||user.name||'User')+'!','ok');
     setTimeout(()=>showApp(user),500);
   }catch(e){msg('m2','❌ '+e.message,'err');}
-  setLoad('ver-btn',false,'Verify & Login');
+  setLoad('ver-btn',false,'Verify & Access →');
 }
 
 async function showApp(user){
@@ -219,7 +480,7 @@ async function showApp(user){
 
 async function loadCourses(){
   const cl=document.getElementById('course-list');
-  cl.innerHTML='<span class="spinner"></span>';
+  cl.innerHTML='<div class="empty-state"><span class="spinner"></span></div>';
   try{
     const [er,pr]=await Promise.all([
       req('GET','https://prod-learn-api.upgrad.com/apis/v3/enrollments?platform=web-learn-lite&pageNo=1&pageSize=20&enrolmentStatus=ALL'),
@@ -228,17 +489,19 @@ async function loadCourses(){
     const enrolls=await er.json();
     const progs=await pr.json();
     cl.innerHTML='';
-    if(!Array.isArray(enrolls)||!enrolls.length){cl.innerHTML='<div style="color:#475569;font-size:.82rem">No courses found.</div>';return;}
+    if(!Array.isArray(enrolls)||!enrolls.length){
+      cl.innerHTML='<div class="empty-state">No courses found.</div>';return;
+    }
     enrolls.forEach(e=>{
       const c=e.course||e;
       const p=progs[c.id]?Math.round(progs[c.id].userProgress):0;
       const d=document.createElement('div');
       d.className='course-item';d.dataset.id=c.id;
-      d.innerHTML=`<div style="font-weight:600">${c.name||'Course '+c.id}</div><div class="cprog">${p}% complete</div><div class="pbar"><div class="pfill" style="width:${p}%"></div></div>`;
+      d.innerHTML=`<div class="cname">${c.name||'Course '+c.id}</div><div class="cpct">${p}% complete</div><div class="pbar"><div class="pfill" style="width:${p}%"></div></div>`;
       d.onclick=()=>selectCourse(c.id,c.name,d);
       cl.appendChild(d);
     });
-  }catch(e){cl.innerHTML='<div style="color:#fca5a5;font-size:.82rem">❌ '+e.message+'</div>';}
+  }catch(e){cl.innerHTML='<div class="empty-state" style="color:#ff8099">❌ '+e.message+'</div>';}
 }
 
 async function selectCourse(cid,cname,el){
@@ -248,20 +511,17 @@ async function selectCourse(cid,cname,el){
   document.getElementById('no-sel').style.display='none';
   document.getElementById('mod-area').style.display='block';
   document.getElementById('mod-title').textContent=cname||'Modules';
-  document.getElementById('mod-list').innerHTML='<span class="spinner"></span> Loading...';
+  document.getElementById('mod-list').innerHTML='<div class="empty-state"><span class="spinner"></span> Loading modules...</div>';
   document.getElementById('res-list').innerHTML='';
   document.getElementById('go-btn').disabled=true;
   try{
     const mgr=await req('GET',`https://prod-learn-api.upgrad.com/apis/v2/modulegroups?courseId=${cid}&specialisationKey=${cid}_default`);
     const mgs=await mgr.json();
-    // Collect all module ids included in progress
     const mids=[];
     mgs.forEach(g=>(g.modules||[]).forEach(m=>{if(m.isPublished)mids.push(m.id);}));
-    // Fetch segment progress in parallel (batches of 5)
     const progMap={};
     for(let i=0;i<mids.length;i+=5){
-      const batch=mids.slice(i,i+5);
-      await Promise.all(batch.map(async mid=>{
+      await Promise.all(mids.slice(i,i+5).map(async mid=>{
         try{const r=await req('GET',`https://learnerprogress.upgrad.com/progress/module/${mid}?courseId=${cid}&level=segment&userId=${AUTH.userId}`);progMap[mid]=await r.json();}
         catch{progMap[mid]=null;}
       }));
@@ -273,11 +533,11 @@ async function selectCourse(cid,cname,el){
         const p=progMap[m.id];
         const segs=[];
         if(p&&p.sessions)p.sessions.forEach(s=>(s.segments||[]).forEach(sg=>segs.push({id:sg.id,done:sg.isSegmentComplete})));
-        modules.push({id:m.id,name:m.name,group:g.name,pct:p?Math.round(p.userProgress||0):0,segs,included:m.isIncludedInProgress});
+        modules.push({id:m.id,name:m.name,group:g.name,pct:p?Math.round(p.userProgress||0):0,segs});
       });
     });
     renderModules();
-  }catch(e){document.getElementById('mod-list').innerHTML='<div style="color:#fca5a5;font-size:.82rem">❌ '+e.message+'</div>';}
+  }catch(e){document.getElementById('mod-list').innerHTML='<div class="empty-state" style="color:#ff8099">❌ '+e.message+'</div>';}
 }
 
 function renderModules(){
@@ -288,11 +548,11 @@ function renderModules(){
     const gd=document.createElement('div');gd.className='mgroup';
     gd.innerHTML=`<div class="gname">${g}</div>`;
     ms.forEach(m=>{
-      const pc=m.pct===100?'done':m.pct>0?'part':'';
-      const pt=m.pct===100?'✅ Done':m.pct>0?m.pct+'%':'0%';
+      const pc=m.pct===100?'done':m.pct>0?'part':'zero';
+      const pt=m.pct===100?'DONE':m.pct>0?m.pct+'%':'0%';
       const incomplete=m.segs.filter(s=>!s.done).length;
-      const row=document.createElement('div');row.className='mrow';row.dataset.id=m.id;
-      row.innerHTML=`<input class="mcb" type="checkbox" data-id="${m.id}" onchange="updateCt()"/><div class="mname">${m.name}<div class="mseg">${m.segs.length} segments · ${incomplete} remaining</div></div><div class="mprog ${pc}">${pt}</div>`;
+      const row=document.createElement('div');row.className='mrow';
+      row.innerHTML=`<input class="mcb" type="checkbox" data-id="${m.id}" onchange="updateCt()"/><div class="mname">${m.name}<div class="mseg">${m.segs.length} segs · ${incomplete} remaining</div></div><div class="mprog ${pc}">${pt}</div>`;
       row.onclick=e=>{if(e.target.type==='checkbox')return;const cb=row.querySelector('.mcb');cb.checked=!cb.checked;updateCt();};
       gd.appendChild(row);
     });
@@ -311,52 +571,41 @@ function selIncomplete(){
   document.querySelectorAll('.mcb').forEach(cb=>{
     const m=modules.find(x=>x.id===parseInt(cb.dataset.id));
     cb.checked=m&&m.pct<100;
-  });
-  updateCt();
+  });updateCt();
 }
 
 async function runComplete(){
   const sel=Array.from(document.querySelectorAll('.mcb:checked')).map(c=>modules.find(m=>m.id===parseInt(c.dataset.id))).filter(Boolean);
   if(!sel.length)return;
   const btn=document.getElementById('go-btn');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Working...';
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Processing...';
   const rl=document.getElementById('res-list');rl.innerHTML='';
-
   for(const mod of sel){
     const todo=mod.segs.filter(s=>!s.done);
     const row=document.createElement('div');
     row.className='ri ru';
-    row.innerHTML=`<div class="dot db"></div><span><b>${mod.name}</b> — 0/${todo.length} segments...</span>`;
+    row.innerHTML=`<div class="dot db"></div><span><b>${mod.name}</b> — 0/${todo.length} segments</span>`;
     rl.appendChild(row);rl.scrollTop=rl.scrollHeight;
-
     let ok=0,fail=0;
     for(const seg of todo){
       try{
         const r=await req('PUT',`https://learnerprogress.upgrad.com/progress?userId=${AUTH.userId}`,
-          {completed:true,componentId:seg.id,percentComplete:100},
-          {courseid:String(curCourseId)});
+          {completed:true,componentId:seg.id,percentComplete:100},{courseid:String(curCourseId)});
         const d=await r.json();
-        if(d.completed===true||d.isSegmentComplete===true)ok++;
-        else fail++;
+        if(d.completed===true||d.isSegmentComplete===true)ok++;else fail++;
       }catch{fail++;}
-      row.querySelector('span').innerHTML=`<b>${mod.name}</b> — ${ok}/${todo.length} segments done`;
+      row.querySelector('span').innerHTML=`<b>${mod.name}</b> — ${ok}/${todo.length} segments`;
       await new Promise(r=>setTimeout(r,120));
     }
     row.className='ri '+(fail===0?'ok':'er');
     row.innerHTML=fail===0
       ?`<div class="dot dg"></div><span>✅ <b>${mod.name}</b> — all ${todo.length} segments complete</span>`
-      :`<div class="dot dr"></div><span>⚠️ <b>${mod.name}</b> — ${ok} ok, ${fail} failed</span>`;
+      :`<div class="dot dr"></div><span>⚠️ <b>${mod.name}</b> — ${ok} ok · ${fail} failed</span>`;
   }
-
-  btn.disabled=false;btn.innerHTML='🚀 Mark Selected Complete';
-  // Refresh
-  setTimeout(()=>{
-    const el=document.querySelector('.course-item.sel');
-    if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);
-  },1000);
+  btn.disabled=false;btn.innerHTML='⚡ Mark Selected as Complete';
+  setTimeout(()=>{const el=document.querySelector('.course-item.sel');if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);},1000);
 }
 
-// Auto-login if token saved
 (async()=>{
   if(loadAuth()&&AUTH.token){
     try{
