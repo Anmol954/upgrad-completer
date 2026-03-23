@@ -430,6 +430,9 @@ async function req(method,url,body,extra={}){
   const res=await fetch(proxyUrl(url),opts);
   const t=res.headers.get('auth-token');
   if(t){AUTH.token=t;saveAuth();}
+  // Capture sessionid exposed by proxy from Set-Cookie
+  const sid=res.headers.get('x-session-id');
+  if(sid){AUTH.sessionId=sid;saveAuth();}
   return res;
 }
 function msg(id,text,type){const e=document.getElementById(id);e.textContent=text;e.className='msg show '+type;}
