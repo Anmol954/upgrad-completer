@@ -4,310 +4,319 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>CB // upGrad Completer</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#080c14;
-  --surface:#0d1422;
-  --border:#1a2540;
-  --accent:#00f5c4;
-  --accent2:#7c3aed;
-  --red:#ff4d6d;
-  --yellow:#ffd60a;
-  --text:#ccd6f6;
-  --muted:#4a5568;
-  --glow:0 0 20px rgba(0,245,196,.15);
+  --bg:#0a0000;
+  --surface:#130000;
+  --surface2:#1a0000;
+  --border:#3d0000;
+  --red:#e63946;
+  --red2:#ff1a1a;
+  --red-dark:#8b0000;
+  --white:#f5f0f0;
+  --muted:#8a6060;
+  --text:#e8d5d5;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{
-  font-family:'JetBrains Mono',monospace;
+  font-family:'Rajdhani',sans-serif;
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
 }
 
-/* Animated grid background */
+/* Spider web background */
 body::before{
   content:'';
   position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(0,245,196,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,245,196,.03) 1px,transparent 1px);
-  background-size:40px 40px;
-  pointer-events:none;
-  z-index:0;
+    repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(180,0,0,.08) 60px),
+    repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(180,0,0,.08) 60px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:0;
 }
 
-/* Glow orbs */
+/* Red glow top-left like a web anchor */
 body::after{
   content:'';
-  position:fixed;
-  top:-200px;right:-200px;
-  width:600px;height:600px;
-  background:radial-gradient(circle,rgba(124,58,237,.12) 0%,transparent 70%);
+  position:fixed;top:-150px;left:-150px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(180,0,0,.15) 0%,transparent 70%);
   pointer-events:none;z-index:0;
 }
 
 .wrap{max-width:1100px;margin:0 auto;padding:24px;position:relative;z-index:1;}
 
 /* Header */
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--border);}
-.logo{display:flex;align-items:center;gap:14px;}
-.logo-icon{
-  width:42px;height:42px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;font-weight:800;color:#000;
-  font-family:'Syne',sans-serif;
-  box-shadow:0 0 20px rgba(0,245,196,.3);
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:40px;padding-bottom:20px;
+  border-bottom:1px solid var(--border);
+  position:relative;
 }
-.logo-text{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.02em;}
-.logo-text span{color:var(--accent);}
-.logo-sub{font-size:.65rem;color:var(--muted);margin-top:2px;letter-spacing:.1em;text-transform:uppercase;}
-.header-right{display:flex;align-items:center;gap:10px;}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.status-txt{font-size:.7rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;}
+.header::after{
+  content:'';position:absolute;bottom:-1px;left:0;
+  width:120px;height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
+}
+
+.logo{display:flex;align-items:center;gap:16px;}
+.logo-icon{
+  width:48px;height:48px;
+  background:var(--red);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bangers',cursive;font-size:1.3rem;color:#fff;
+  letter-spacing:.05em;
+  box-shadow:0 0 0 2px var(--red-dark),0 0 20px rgba(230,57,70,.3);
+}
+.logo-text{font-family:'Bangers',cursive;font-size:1.4rem;letter-spacing:.08em;color:var(--white);}
+.logo-text span{color:var(--red);}
+.logo-sub{font-size:.65rem;color:var(--muted);margin-top:2px;letter-spacing:.12em;text-transform:uppercase;font-family:'Rajdhani',sans-serif;}
+
+/* Spider sense indicator */
+.sense{display:flex;align-items:center;gap:10px;}
+.sense-rings{position:relative;width:20px;height:20px;}
+.sense-rings::before,.sense-rings::after{
+  content:'';position:absolute;top:50%;left:50%;
+  border-radius:50%;border:1.5px solid var(--red);
+  transform:translate(-50%,-50%);
+  animation:senseRing 2s infinite;
+}
+.sense-rings::before{width:8px;height:8px;}
+.sense-rings::after{width:16px;height:16px;animation-delay:.5s;opacity:.5;}
+@keyframes senseRing{0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1)}50%{opacity:.3;transform:translate(-50%,-50%) scale(1.1)}}
+.sense-txt{font-size:.7rem;color:var(--red);letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
 
 /* User bar */
 #ubar{
   display:none;align-items:center;gap:14px;
   background:var(--surface);border:1px solid var(--border);
-  border-radius:12px;padding:12px 18px;margin-bottom:28px;
+  border-radius:8px;padding:12px 18px;margin-bottom:28px;
   position:relative;overflow:hidden;
 }
 #ubar::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:linear-gradient(to bottom,var(--accent),var(--accent2));
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--red);
 }
 .avatar{
-  width:38px;height:38px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  width:38px;height:38px;border-radius:4px;
+  background:var(--red);
   display:flex;align-items:center;justify-content:center;
-  font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0;
+  font-weight:700;color:#fff;font-size:1rem;flex-shrink:0;
+  font-family:'Bangers',cursive;letter-spacing:.05em;
 }
 .uinfo{flex:1;}
-.uname{font-size:.88rem;font-weight:700;color:#fff;}
-.uemail{font-size:.7rem;color:var(--muted);margin-top:1px;}
+.uname{font-size:.95rem;font-weight:700;color:var(--white);letter-spacing:.03em;}
+.uemail{font-size:.72rem;color:var(--muted);margin-top:1px;}
 .logout-btn{
   background:transparent;border:1px solid var(--border);
-  color:var(--muted);border-radius:6px;padding:5px 12px;
-  font-size:.72rem;cursor:pointer;font-family:inherit;
-  transition:all .2s;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--muted);border-radius:4px;padding:5px 14px;
+  font-size:.72rem;cursor:pointer;font-family:'Rajdhani',sans-serif;
+  font-weight:600;transition:all .2s;letter-spacing:.08em;text-transform:uppercase;
 }
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* Login area */
-#login-area{animation:fadeUp .5s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* Login */
+#login-area{animation:swingIn .5s ease;}
+@keyframes swingIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
-.login-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto;}
+.login-hero{text-align:center;margin-bottom:40px;position:relative;}
+.login-hero h2{
+  font-family:'Bangers',cursive;
+  font-size:3.5rem;color:var(--white);
+  line-height:1;margin-bottom:10px;
+  letter-spacing:.08em;
+  text-shadow:3px 3px 0 var(--red-dark);
+}
+.login-hero h2 span{color:var(--red);text-shadow:3px 3px 0 #500000;}
+.login-hero p{font-size:.85rem;color:var(--muted);letter-spacing:.05em;}
+
+/* Web line decorations */
+.web-line{
+  position:absolute;top:50%;width:80px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red-dark));
+}
+.web-line.left{right:calc(100% + 10px);transform:rotate(-15deg);}
+.web-line.right{left:calc(100% + 10px);transform:rotate(15deg);background:linear-gradient(90deg,var(--red-dark),transparent);}
+
+.login-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:780px;margin:0 auto;}
 @media(max-width:600px){.login-grid{grid-template-columns:1fr;}}
 
 .panel{
   background:var(--surface);
   border:1px solid var(--border);
-  border-radius:16px;padding:28px;
+  border-radius:8px;padding:28px;
   position:relative;overflow:hidden;
   transition:border-color .3s;
 }
-.panel.active{border-color:rgba(0,245,196,.4);box-shadow:var(--glow);}
-.panel::after{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,245,196,.3),transparent);
+.panel.active{border-color:var(--red);}
+.panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
   opacity:0;transition:opacity .3s;
 }
-.panel.active::after{opacity:1;}
+.panel.active::before{opacity:1;}
+
+/* Subtle web corner decoration */
+.panel::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:60px;height:60px;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 9px,rgba(180,0,0,.1) 10px),
+    repeating-linear-gradient(90deg,transparent,transparent 9px,rgba(180,0,0,.1) 10px);
+  background-size:10px 10px;
+  opacity:.5;
+}
 
 .panel-num{
-  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--red);margin-bottom:12px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
 }
-.panel-num::before{
-  content:'';display:inline-block;width:20px;height:1px;background:var(--accent);
+.panel-num::before{content:'';display:inline-block;width:16px;height:2px;background:var(--red);}
+.panel-title{
+  font-family:'Bangers',cursive;font-size:1.5rem;
+  margin-bottom:20px;color:var(--white);letter-spacing:.06em;
 }
-.panel-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:20px;color:#fff;}
 
-label{font-size:.7rem;color:var(--muted);display:block;margin-bottom:6px;margin-top:16px;letter-spacing:.08em;text-transform:uppercase;}
+label{font-size:.7rem;color:var(--muted);display:block;margin-bottom:6px;margin-top:14px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;}
 label:first-of-type{margin-top:0;}
 
 input{
-  width:100%;
-  background:#060a12;
+  width:100%;background:#0d0000;
   border:1px solid var(--border);
-  border-radius:8px;padding:11px 14px;
-  color:#fff;font-size:.88rem;
+  border-radius:4px;padding:11px 14px;
+  color:var(--white);font-size:.9rem;
   outline:none;transition:all .2s;
-  font-family:'JetBrains Mono',monospace;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
 }
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,245,196,.1);}
+input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,57,70,.1);}
 input:disabled{opacity:.3;}
 input::placeholder{color:var(--muted);}
 
 .btn{
-  width:100%;padding:12px;border:none;border-radius:8px;
-  font-size:.82rem;font-weight:700;cursor:pointer;
-  transition:all .25s;margin-top:14px;
+  width:100%;padding:12px;border:none;border-radius:4px;
+  font-size:.85rem;font-weight:700;cursor:pointer;
+  transition:all .2s;margin-top:14px;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase;
+  font-family:'Rajdhani',sans-serif;letter-spacing:.1em;text-transform:uppercase;
 }
 .btn:disabled{opacity:.3;cursor:not-allowed;}
-.btn-accent{
-  background:var(--accent);color:#000;
-  box-shadow:0 0 20px rgba(0,245,196,.2);
+.btn-red{
+  background:var(--red);color:#fff;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
 }
-.btn-accent:hover:not(:disabled){
-  background:#00ffd0;box-shadow:0 0 30px rgba(0,245,196,.4);transform:translateY(-1px);
+.btn-red:hover:not(:disabled){background:var(--red2);transform:translateY(-1px);}
+.btn-dark{
+  background:var(--surface2);color:var(--text);border:1px solid var(--border);
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
 }
-.btn-purple{
-  background:var(--accent2);color:#fff;
-  box-shadow:0 0 20px rgba(124,58,237,.2);
-}
-.btn-purple:hover:not(:disabled){
-  background:#6d28d9;box-shadow:0 0 30px rgba(124,58,237,.4);transform:translateY(-1px);
-}
-.btn-ghost{
-  background:transparent;border:1px solid var(--border);color:var(--muted);
-}
-.btn-ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.btn-dark:hover:not(:disabled){border-color:var(--red);color:var(--red);}
 
-.msg{font-size:.75rem;margin-top:10px;padding:10px 12px;border-radius:7px;display:none;line-height:1.5;}
+.msg{font-size:.8rem;margin-top:10px;padding:10px 12px;border-radius:4px;display:none;line-height:1.5;font-weight:600;letter-spacing:.03em;}
 .msg.show{display:block;}
-.msg.err{background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.3);color:#ff8099;}
-.msg.ok{background:rgba(0,245,196,.06);border:1px solid rgba(0,245,196,.25);color:var(--accent);}
-.msg.info{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.3);color:#a78bfa;}
+.msg.err{background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.3);color:#ff8090;border-left:3px solid var(--red);}
+.msg.ok{background:rgba(180,0,0,.1);border:1px solid rgba(180,0,0,.3);color:#ff9090;border-left:3px solid var(--red-dark);}
 
-/* Main dashboard */
-#main-area{display:none;grid-template-columns:300px 1fr;gap:20px;animation:fadeUp .4s ease;}
+/* Main app */
+#main-area{display:none;grid-template-columns:290px 1fr;gap:20px;animation:swingIn .4s ease;}
 @media(max-width:800px){#main-area{grid-template-columns:1fr;}}
 
 .sidebar-panel,.content-panel{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:22px;
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;
+  position:relative;overflow:hidden;
 }
-.sec-label{
-  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:8px;
+.sidebar-panel::before,.content-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),transparent);
 }
-.sec-label::before{content:'//';color:var(--muted);}
 
-/* Course items */
+.sec-label{
+  font-family:'Bangers',cursive;font-size:1rem;
+  color:var(--white);margin-bottom:16px;
+  letter-spacing:.1em;display:flex;align-items:center;gap:10px;
+}
+.sec-label::before{content:'//';color:var(--red);font-family:'Rajdhani',sans-serif;font-size:.8rem;}
+
 .course-item{
-  padding:12px 14px;border-radius:10px;cursor:pointer;
-  margin-bottom:8px;border:1px solid var(--border);
+  padding:12px 14px;border-radius:4px;cursor:pointer;
+  margin-bottom:6px;border:1px solid var(--border);
   transition:all .2s;position:relative;overflow:hidden;
 }
-.course-item:hover{border-color:rgba(0,245,196,.3);background:rgba(0,245,196,.03);}
-.course-item.sel{
-  border-color:var(--accent);background:rgba(0,245,196,.05);
-}
-.course-item.sel::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--accent);
-}
-.cname{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:4px;}
-.cpct{font-size:.68rem;color:var(--muted);margin-bottom:6px;}
+.course-item:hover{border-color:var(--red);background:rgba(139,0,0,.1);}
+.course-item.sel{border-color:var(--red);background:rgba(139,0,0,.15);}
+.course-item.sel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);}
+.cname{font-size:.85rem;font-weight:700;color:var(--white);margin-bottom:4px;letter-spacing:.03em;}
+.cpct{font-size:.7rem;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;}
 .pbar{height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
-.pfill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .5s ease;}
+.pfill{height:100%;background:var(--red);border-radius:2px;transition:width .4s;}
 
-/* Modules */
-.mod-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
-.mod-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#fff;}
-
-.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
 .chip{
   background:transparent;border:1px solid var(--border);color:var(--muted);
-  border-radius:6px;padding:5px 12px;font-size:.7rem;cursor:pointer;
-  font-family:inherit;transition:all .2s;letter-spacing:.05em;
+  border-radius:3px;padding:5px 12px;font-size:.72rem;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-weight:600;transition:all .2s;letter-spacing:.08em;text-transform:uppercase;
 }
-.chip:hover{border-color:var(--accent);color:var(--accent);}
-.sel-count{font-size:.7rem;color:var(--muted);margin-left:auto;align-self:center;}
+.chip:hover{border-color:var(--red);color:var(--red);}
+.sel-count{font-size:.72rem;color:var(--muted);margin-left:auto;font-weight:600;letter-spacing:.05em;}
 
-.mgroup{margin-bottom:18px;}
+.mgroup{margin-bottom:16px;}
 .gname{
-  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;
   color:var(--muted);padding-bottom:8px;margin-bottom:8px;
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid var(--border);font-weight:700;
+  display:flex;align-items:center;gap:6px;
 }
+.gname::before{content:'';display:inline-block;width:10px;height:1px;background:var(--red);}
 
 .mrow{
   display:flex;align-items:center;gap:12px;
-  padding:10px 12px;border-radius:8px;margin-bottom:4px;
-  cursor:pointer;border:1px solid transparent;
-  transition:all .2s;
+  padding:9px 12px;border-radius:4px;margin-bottom:3px;
+  cursor:pointer;border:1px solid transparent;transition:all .15s;
 }
-.mrow:hover{background:rgba(255,255,255,.02);border-color:var(--border);}
-.mcb{
-  flex-shrink:0;width:16px;height:16px;
-  accent-color:var(--accent);cursor:pointer;
-}
-.mname{flex:1;font-size:.8rem;line-height:1.4;}
-.mseg{font-size:.65rem;color:var(--muted);margin-top:2px;}
-.mprog{
-  font-size:.65rem;flex-shrink:0;padding:3px 9px;
-  border-radius:20px;font-weight:700;letter-spacing:.05em;
-}
-.mprog.done{background:rgba(0,245,196,.1);color:var(--accent);border:1px solid rgba(0,245,196,.2);}
-.mprog.part{background:rgba(255,214,10,.08);color:var(--yellow);border:1px solid rgba(255,214,10,.2);}
-.mprog.zero{background:rgba(255,77,109,.06);color:#ff8099;border:1px solid rgba(255,77,109,.15);}
+.mrow:hover{background:rgba(139,0,0,.08);border-color:var(--border);}
+.mcb{flex-shrink:0;width:15px;height:15px;accent-color:var(--red);cursor:pointer;}
+.mname{flex:1;font-size:.82rem;line-height:1.4;font-weight:600;}
+.mseg{font-size:.65rem;color:var(--muted);margin-top:2px;font-weight:400;letter-spacing:.03em;}
+.mprog{font-size:.65rem;flex-shrink:0;padding:2px 8px;border-radius:3px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.mprog.done{background:rgba(139,0,0,.2);color:#ff6060;border:1px solid rgba(139,0,0,.4);}
+.mprog.part{background:rgba(180,80,0,.15);color:#ffa060;border:1px solid rgba(180,80,0,.3);}
+.mprog.zero{background:rgba(50,0,0,.3);color:var(--muted);border:1px solid var(--border);}
 
-/* Go button */
-.go-btn{
-  background:linear-gradient(135deg,var(--accent2),var(--accent));
-  color:#000;border:none;border-radius:10px;
-  padding:14px;width:100%;font-size:.85rem;font-weight:700;
-  cursor:pointer;margin-top:16px;font-family:inherit;
-  letter-spacing:.08em;text-transform:uppercase;
-  transition:all .3s;box-shadow:0 0 30px rgba(0,245,196,.15);
+.btn-go{
+  background:var(--red);color:#fff;border:none;
+  padding:14px;width:100%;
+  font-size:.9rem;font-weight:700;cursor:pointer;margin-top:16px;
+  font-family:'Rajdhani',sans-serif;letter-spacing:.12em;text-transform:uppercase;
+  transition:all .25s;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
 }
-.go-btn:hover:not(:disabled){
-  box-shadow:0 0 40px rgba(0,245,196,.35);transform:translateY(-2px);
-}
-.go-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;}
+.btn-go:hover:not(:disabled){background:var(--red2);transform:translateY(-2px);}
+.btn-go:disabled{opacity:.3;cursor:not-allowed;transform:none;}
 
-/* Results */
-.res-list{margin-top:14px;max-height:280px;overflow-y:auto;}
-.res-list::-webkit-scrollbar{width:4px;}
-.res-list::-webkit-scrollbar-track{background:transparent;}
-.res-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-.ri{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 12px;border-radius:8px;margin-bottom:4px;
-  font-size:.75rem;border:1px solid transparent;
-}
-.ri.ok{background:rgba(0,245,196,.05);border-color:rgba(0,245,196,.2);color:var(--accent);}
-.ri.er{background:rgba(255,77,109,.05);border-color:rgba(255,77,109,.2);color:#ff8099;}
-.ri.ru{background:rgba(124,58,237,.05);border-color:rgba(124,58,237,.2);color:#a78bfa;}
-
+.res-list{margin-top:14px;max-height:260px;overflow-y:auto;}
+.res-list::-webkit-scrollbar{width:3px;}
+.res-list::-webkit-scrollbar-thumb{background:var(--border);}
+.ri{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:4px;margin-bottom:4px;font-size:.78rem;border:1px solid transparent;font-weight:600;letter-spacing:.03em;}
+.ri.ok{background:rgba(139,0,0,.12);border-color:rgba(139,0,0,.3);color:#ff8080;}
+.ri.er{background:rgba(80,0,0,.2);border-color:rgba(80,0,0,.4);color:var(--muted);}
+.ri.ru{background:rgba(100,0,0,.1);border-color:var(--border);color:var(--muted);}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dg{background:var(--accent);box-shadow:0 0 6px var(--accent);}
-.dr{background:var(--red);}
-.db{background:#a78bfa;animation:pulse .8s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-.spinner{
-  display:inline-block;width:13px;height:13px;
-  border:2px solid var(--border);border-top-color:var(--accent);
-  border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;
-}
+.dg{background:var(--red);}
+.dr{background:#555;}
+.db{background:var(--red);animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:.82rem;line-height:2;font-weight:600;letter-spacing:.05em;}
 
-.empty-state{
-  text-align:center;padding:40px 20px;color:var(--muted);
-  font-size:.8rem;line-height:2;
-}
-.empty-icon{font-size:2rem;margin-bottom:12px;display:block;opacity:.4;}
-
-/* Terminal cursor blink on inputs */
-input:focus{caret-color:var(--accent);}
-
-/* Scrollbar */
-*::-webkit-scrollbar{width:6px;}
-*::-webkit-scrollbar-track{background:transparent;}
-*::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+/* Spider web SVG overlay in corners */
+.web-corner{position:absolute;opacity:.06;pointer-events:none;}
+.web-corner.tr{top:0;right:0;}
+.web-corner.bl{bottom:0;left:0;transform:rotate(180deg);}
 </style>
 </head>
 <body>
@@ -319,12 +328,12 @@ input:focus{caret-color:var(--accent);}
       <div class="logo-icon">CB</div>
       <div>
         <div class="logo-text"><span>Chattees</span> Biradri</div>
-        <div class="logo-sub">upGrad Auto-Completer v2.0</div>
+        <div class="logo-sub">upGrad Auto-Completer &mdash; v2.0</div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="status-dot"></div>
-      <div class="status-txt">System Online</div>
+    <div class="sense">
+      <div class="sense-rings"></div>
+      <div class="sense-txt">Spider-Sense Active</div>
     </div>
   </div>
 
@@ -332,35 +341,48 @@ input:focus{caret-color:var(--accent);}
   <div id="ubar">
     <div class="avatar" id="uinit">?</div>
     <div class="uinfo">
-      <div class="uname" id="uname">—</div>
-      <div class="uemail" id="uemail">—</div>
+      <div class="uname" id="uname">Loading...</div>
+      <div class="uemail" id="uemail"></div>
     </div>
     <button class="logout-btn" onclick="logout()">[ Logout ]</button>
   </div>
 
   <!-- Login -->
   <div id="login-area">
-    <div style="text-align:center;margin-bottom:32px;">
-      <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:8px;">
-        Complete Modules.<br/><span style="color:var(--accent)">Zero Effort.</span>
-      </div>
-      <div style="font-size:.78rem;color:var(--muted);">Login with your upGrad phone number to get started.</div>
+    <div class="login-hero">
+      <div class="web-line left"></div>
+      <h2>With Great Power<br/><span>Comes Zero Homework.</span></h2>
+      <p>Login with your upGrad registered phone number to get started.</p>
+      <div class="web-line right"></div>
     </div>
     <div class="login-grid">
       <div class="panel active" id="s1">
+        <!-- Web corner decoration -->
+        <svg class="web-corner tr" width="80" height="80" viewBox="0 0 80 80">
+          <path d="M80 0 Q40 40 0 80" stroke="red" stroke-width="1" fill="none"/>
+          <path d="M80 20 Q50 50 20 80" stroke="red" stroke-width="1" fill="none"/>
+          <path d="M80 40 Q60 60 40 80" stroke="red" stroke-width="1" fill="none"/>
+          <path d="M40 0 Q60 40 80 60" stroke="red" stroke-width="0.5" fill="none"/>
+          <path d="M60 0 Q70 30 80 40" stroke="red" stroke-width="0.5" fill="none"/>
+        </svg>
         <div class="panel-num">Step 01</div>
         <div class="panel-title">Phone Number</div>
-        <label>Mobile (with country code)</label>
+        <label>Mobile with country code</label>
         <input type="tel" id="phone" placeholder="+91 9876543210" onkeydown="if(event.key==='Enter')sendOtp()"/>
-        <button class="btn btn-accent" id="otp-btn" onclick="sendOtp()">Send OTP →</button>
+        <button class="btn btn-red" id="otp-btn" onclick="sendOtp()">Shoot Web &mdash; Send OTP</button>
         <div class="msg" id="m1"></div>
       </div>
       <div class="panel" id="s2">
+        <svg class="web-corner tr" width="80" height="80" viewBox="0 0 80 80">
+          <path d="M80 0 Q40 40 0 80" stroke="red" stroke-width="1" fill="none"/>
+          <path d="M80 20 Q50 50 20 80" stroke="red" stroke-width="1" fill="none"/>
+          <path d="M80 40 Q60 60 40 80" stroke="red" stroke-width="1" fill="none"/>
+        </svg>
         <div class="panel-num">Step 02</div>
         <div class="panel-title">Verify OTP</div>
-        <label>Enter OTP sent to your phone</label>
-        <input type="text" id="otp" placeholder="_ _ _ _" maxlength="6" disabled onkeydown="if(event.key==='Enter')verifyOtp()" inputmode="numeric"/>
-        <button class="btn btn-purple" id="ver-btn" onclick="verifyOtp()" disabled>Verify & Access →</button>
+        <label>OTP sent to your phone</label>
+        <input type="text" id="otp" placeholder="Enter OTP" maxlength="6" disabled onkeydown="if(event.key==='Enter')verifyOtp()" inputmode="numeric"/>
+        <button class="btn btn-dark" id="ver-btn" onclick="verifyOtp()" disabled>Swing In &mdash; Verify &amp; Login</button>
         <div class="msg" id="m2"></div>
       </div>
     </div>
@@ -368,48 +390,37 @@ input:focus{caret-color:var(--accent);}
 
   <!-- Main App -->
   <div id="main-area">
-    <!-- Sidebar -->
     <div class="sidebar-panel">
       <div class="sec-label">Enrolled Courses</div>
-      <div id="course-list"><div class="empty-state"><span class="empty-icon">📡</span>Loading courses...</div></div>
+      <div id="course-list"><div class="empty-state"><span class="spinner"></span></div></div>
     </div>
-
-    <!-- Content -->
     <div class="content-panel">
-      <div id="no-sel" class="empty-state">
-        <span class="empty-icon">←</span>
-        Select a course to load its modules.
-      </div>
+      <div id="no-sel" class="empty-state">Select a course to load its modules.</div>
       <div id="mod-area" style="display:none">
-        <div class="mod-header">
-          <div class="mod-title" id="mod-title">Modules</div>
-        </div>
+        <div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--white);margin-bottom:16px;letter-spacing:.08em;" id="mod-title">Modules</div>
         <div class="action-row">
-          <button class="chip" onclick="selAll(true)">☑ All</button>
-          <button class="chip" onclick="selAll(false)">☐ None</button>
-          <button class="chip" onclick="selIncomplete()">⏳ Incomplete</button>
+          <button class="chip" onclick="selAll(true)">All</button>
+          <button class="chip" onclick="selAll(false)">None</button>
+          <button class="chip" onclick="selIncomplete()">Incomplete</button>
           <span class="sel-count" id="sel-ct">0 selected</span>
         </div>
         <div id="mod-list"></div>
-        <button class="go-btn" id="go-btn" onclick="runComplete()" disabled>⚡ Mark Selected as Complete</button>
+        <button class="btn-go" id="go-btn" onclick="runComplete()" disabled>Thwip! Mark Selected Complete</button>
         <div class="res-list" id="res-list"></div>
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
+
 let AUTH={token:null,sessionId:null,userId:null};
 let regId=null,curCourseId=null,modules=[];
-
 function saveAuth(){localStorage.setItem('ug_auth2',JSON.stringify(AUTH));}
 function loadAuth(){const s=localStorage.getItem('ug_auth2');if(s){AUTH=JSON.parse(s);return!!AUTH.token;}return false;}
 function logout(){localStorage.removeItem('ug_auth2');AUTH={token:null,sessionId:null,userId:null};location.reload();}
-
 const PROXY='https://upgrad-proxy.anmolmadhav2004.workers.dev';
 function proxyUrl(u){return PROXY+'?url='+encodeURIComponent(u);}
-
 async function req(method,url,body,extra={}){
   const h={'Content-Type':'application/json;charset=UTF-8','accept':'application/json, text/plain, */*',...extra};
   if(AUTH.token)h['auth-token']=AUTH.token;
@@ -421,7 +432,6 @@ async function req(method,url,body,extra={}){
   if(t){AUTH.token=t;saveAuth();}
   return res;
 }
-
 function msg(id,text,type){const e=document.getElementById(id);e.textContent=text;e.className='msg show '+type;}
 function setLoad(id,on,txt){const b=document.getElementById(id);b.disabled=on;b.innerHTML=on?'<span class="spinner"></span> '+txt:txt;}
 
@@ -433,15 +443,15 @@ async function sendOtp(){
   try{
     const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/registration/phone',{phoneNumber:p});
     const d=await r.json();
-    if(!r.ok)throw new Error(d.message||'Failed');
+    if(!r.ok)throw new Error(d.message||'Failed to send OTP');
     regId=d.registrationId;
-    msg('m1','✅ OTP sent to '+p,'ok');
+    msg('m1','OTP sent to '+p,'ok');
     document.getElementById('otp').disabled=false;
     document.getElementById('ver-btn').disabled=false;
     document.getElementById('otp').focus();
     document.getElementById('s2').classList.add('active');
-  }catch(e){msg('m1','❌ '+e.message,'err');}
-  setLoad('otp-btn',false,'Send OTP →');
+  }catch(e){msg('m1','Error: '+e.message,'err');}
+  setLoad('otp-btn',false,'Send OTP');
 }
 
 async function verifyOtp(){
@@ -449,22 +459,36 @@ async function verifyOtp(){
   if(!otpVal)return msg('m2','Enter the OTP.','err');
   setLoad('ver-btn',true,'Verifying...');
   try{
-    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp:Number(otpVal)});
-    if(!r.ok){const d=await r.json();throw new Error(d.message||'Invalid OTP');}
-    await r.json();
+    const otpNum=parseInt(otpVal,10);
+    // Attempt 1: with registrationId
+    const p1=regId?{otp:otpNum,registrationId:regId}:{otp:otpNum};
+    console.log('[CB] OTP attempt 1:',JSON.stringify(p1));
+    let r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',p1);
+    let txt=await r.text();
+    console.log('[CB] Response 1:',r.status,txt.substring(0,300));
+    // Attempt 2: without registrationId if 400
+    if(r.status===400&&regId){
+      console.log('[CB] Retrying without registrationId...');
+      r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp:otpNum});
+      txt=await r.text();
+      console.log('[CB] Response 2:',r.status,txt.substring(0,300));
+    }
+    let d={};
+    try{d=JSON.parse(txt);}catch{}
+    if(!r.ok)throw new Error(d.message||'Invalid OTP (server '+r.status+')');
+    // Get user info
     const r2=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
-    if(!r2.ok)throw new Error('Could not fetch user info');
+    if(!r2.ok)throw new Error('Could not load profile');
     const me=await r2.json();
     const user=me.user||me;
     AUTH.userId=String(user.id||user.userId||'');
-    const ck=document.cookie;
-    const sm=ck.match(/sessionid=([^;]+)/i);
+    const sm=document.cookie.match(/sessionid=([^;]+)/i);
     if(sm)AUTH.sessionId=sm[1];
     saveAuth();
-    msg('m2','✅ Welcome, '+(user.firstname||user.name||'User')+'!','ok');
-    setTimeout(()=>showApp(user),500);
-  }catch(e){msg('m2','❌ '+e.message,'err');}
-  setLoad('ver-btn',false,'Verify & Access →');
+    msg('m2','Welcome, '+(user.firstname||user.name||'User')+'!','ok');
+    setTimeout(()=>showApp(user),600);
+  }catch(e){msg('m2','Error: '+e.message,'err');}
+  setLoad('ver-btn',false,'Verify & Login');
 }
 
 async function showApp(user){
@@ -484,76 +508,75 @@ async function loadCourses(){
   try{
     const [er,pr]=await Promise.all([
       req('GET','https://prod-learn-api.upgrad.com/apis/v3/enrollments?platform=web-learn-lite&pageNo=1&pageSize=20&enrolmentStatus=ALL'),
-      req('GET',`https://learnerprogress.upgrad.com/progress/courses?userId=${AUTH.userId}`)
+      req('GET','https://learnerprogress.upgrad.com/progress/courses?userId='+AUTH.userId)
     ]);
     const enrolls=await er.json();
     const progs=await pr.json();
     cl.innerHTML='';
-    if(!Array.isArray(enrolls)||!enrolls.length){
-      cl.innerHTML='<div class="empty-state">No courses found.</div>';return;
-    }
-    enrolls.forEach(e=>{
+    if(!Array.isArray(enrolls)||!enrolls.length){cl.innerHTML='<div class="empty-state">No courses found.</div>';return;}
+    enrolls.forEach(function(e){
       const c=e.course||e;
       const p=progs[c.id]?Math.round(progs[c.id].userProgress):0;
       const d=document.createElement('div');
       d.className='course-item';d.dataset.id=c.id;
-      d.innerHTML=`<div class="cname">${c.name||'Course '+c.id}</div><div class="cpct">${p}% complete</div><div class="pbar"><div class="pfill" style="width:${p}%"></div></div>`;
-      d.onclick=()=>selectCourse(c.id,c.name,d);
+      d.innerHTML='<div class="cname">'+(c.name||'Course '+c.id)+'</div><div class="cpct">'+p+'% complete</div><div class="pbar"><div class="pfill" style="width:'+p+'%"></div></div>';
+      d.onclick=function(){selectCourse(c.id,c.name,d);};
       cl.appendChild(d);
     });
-  }catch(e){cl.innerHTML='<div class="empty-state" style="color:#ff8099">❌ '+e.message+'</div>';}
+  }catch(e){cl.innerHTML='<div class="empty-state" style="color:#ff8099">'+e.message+'</div>';}
 }
 
 async function selectCourse(cid,cname,el){
-  document.querySelectorAll('.course-item').forEach(x=>x.classList.remove('sel'));
+  document.querySelectorAll('.course-item').forEach(function(x){x.classList.remove('sel');});
   el.classList.add('sel');
   curCourseId=cid;
   document.getElementById('no-sel').style.display='none';
   document.getElementById('mod-area').style.display='block';
   document.getElementById('mod-title').textContent=cname||'Modules';
-  document.getElementById('mod-list').innerHTML='<div class="empty-state"><span class="spinner"></span> Loading modules...</div>';
+  document.getElementById('mod-list').innerHTML='<div class="empty-state"><span class="spinner"></span> Loading...</div>';
   document.getElementById('res-list').innerHTML='';
   document.getElementById('go-btn').disabled=true;
   try{
-    const mgr=await req('GET',`https://prod-learn-api.upgrad.com/apis/v2/modulegroups?courseId=${cid}&specialisationKey=${cid}_default`);
+    const mgr=await req('GET','https://prod-learn-api.upgrad.com/apis/v2/modulegroups?courseId='+cid+'&specialisationKey='+cid+'_default');
     const mgs=await mgr.json();
     const mids=[];
-    mgs.forEach(g=>(g.modules||[]).forEach(m=>{if(m.isPublished)mids.push(m.id);}));
+    mgs.forEach(function(g){(g.modules||[]).forEach(function(m){if(m.isPublished)mids.push(m.id);});});
     const progMap={};
     for(let i=0;i<mids.length;i+=5){
-      await Promise.all(mids.slice(i,i+5).map(async mid=>{
-        try{const r=await req('GET',`https://learnerprogress.upgrad.com/progress/module/${mid}?courseId=${cid}&level=segment&userId=${AUTH.userId}`);progMap[mid]=await r.json();}
-        catch{progMap[mid]=null;}
+      await Promise.all(mids.slice(i,i+5).map(async function(mid){
+        try{const r=await req('GET','https://learnerprogress.upgrad.com/progress/module/'+mid+'?courseId='+cid+'&level=segment&userId='+AUTH.userId);progMap[mid]=await r.json();}
+        catch(e){progMap[mid]=null;}
       }));
     }
     modules=[];
-    mgs.forEach(g=>{
-      (g.modules||[]).forEach(m=>{
+    mgs.forEach(function(g){
+      (g.modules||[]).forEach(function(m){
         if(!m.isPublished)return;
         const p=progMap[m.id];
         const segs=[];
-        if(p&&p.sessions)p.sessions.forEach(s=>(s.segments||[]).forEach(sg=>segs.push({id:sg.id,done:sg.isSegmentComplete})));
-        modules.push({id:m.id,name:m.name,group:g.name,pct:p?Math.round(p.userProgress||0):0,segs});
+        if(p&&p.sessions)p.sessions.forEach(function(s){(s.segments||[]).forEach(function(sg){segs.push({id:sg.id,done:sg.isSegmentComplete});});});
+        modules.push({id:m.id,name:m.name,group:g.name,pct:p?Math.round(p.userProgress||0):0,segs:segs});
       });
     });
     renderModules();
-  }catch(e){document.getElementById('mod-list').innerHTML='<div class="empty-state" style="color:#ff8099">❌ '+e.message+'</div>';}
+  }catch(e){document.getElementById('mod-list').innerHTML='<div class="empty-state" style="color:#ff8099">'+e.message+'</div>';}
 }
 
 function renderModules(){
   const c=document.getElementById('mod-list');c.innerHTML='';
   const groups={};
-  modules.forEach(m=>{if(!groups[m.group])groups[m.group]=[];groups[m.group].push(m);});
-  Object.entries(groups).forEach(([g,ms])=>{
+  modules.forEach(function(m){if(!groups[m.group])groups[m.group]=[];groups[m.group].push(m);});
+  Object.entries(groups).forEach(function(entry){
+    const g=entry[0];const ms=entry[1];
     const gd=document.createElement('div');gd.className='mgroup';
-    gd.innerHTML=`<div class="gname">${g}</div>`;
-    ms.forEach(m=>{
+    gd.innerHTML='<div class="gname">'+g+'</div>';
+    ms.forEach(function(m){
       const pc=m.pct===100?'done':m.pct>0?'part':'zero';
       const pt=m.pct===100?'DONE':m.pct>0?m.pct+'%':'0%';
-      const incomplete=m.segs.filter(s=>!s.done).length;
+      const inc=m.segs.filter(function(s){return!s.done;}).length;
       const row=document.createElement('div');row.className='mrow';
-      row.innerHTML=`<input class="mcb" type="checkbox" data-id="${m.id}" onchange="updateCt()"/><div class="mname">${m.name}<div class="mseg">${m.segs.length} segs · ${incomplete} remaining</div></div><div class="mprog ${pc}">${pt}</div>`;
-      row.onclick=e=>{if(e.target.type==='checkbox')return;const cb=row.querySelector('.mcb');cb.checked=!cb.checked;updateCt();};
+      row.innerHTML='<input class="mcb" type="checkbox" data-id="'+m.id+'" onchange="updateCt()"/><div class="mname">'+m.name+'<div class="mseg">'+m.segs.length+' segs - '+inc+' remaining</div></div><div class="mprog '+pc+'">'+pt+'</div>';
+      row.onclick=function(e){if(e.target.type==='checkbox')return;const cb=row.querySelector('.mcb');cb.checked=!cb.checked;updateCt();};
       gd.appendChild(row);
     });
     c.appendChild(gd);
@@ -566,52 +589,51 @@ function updateCt(){
   document.getElementById('sel-ct').textContent=n+' selected';
   document.getElementById('go-btn').disabled=n===0;
 }
-function selAll(v){document.querySelectorAll('.mcb').forEach(c=>c.checked=v);updateCt();}
+function selAll(v){document.querySelectorAll('.mcb').forEach(function(c){c.checked=v;});updateCt();}
 function selIncomplete(){
-  document.querySelectorAll('.mcb').forEach(cb=>{
-    const m=modules.find(x=>x.id===parseInt(cb.dataset.id));
+  document.querySelectorAll('.mcb').forEach(function(cb){
+    const m=modules.find(function(x){return x.id===parseInt(cb.dataset.id);});
     cb.checked=m&&m.pct<100;
   });updateCt();
 }
 
 async function runComplete(){
-  const sel=Array.from(document.querySelectorAll('.mcb:checked')).map(c=>modules.find(m=>m.id===parseInt(c.dataset.id))).filter(Boolean);
+  const sel=Array.from(document.querySelectorAll('.mcb:checked')).map(function(c){return modules.find(function(m){return m.id===parseInt(c.dataset.id);});}).filter(Boolean);
   if(!sel.length)return;
   const btn=document.getElementById('go-btn');
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Processing...';
   const rl=document.getElementById('res-list');rl.innerHTML='';
   for(const mod of sel){
-    const todo=mod.segs.filter(s=>!s.done);
-    const row=document.createElement('div');
-    row.className='ri ru';
-    row.innerHTML=`<div class="dot db"></div><span><b>${mod.name}</b> — 0/${todo.length} segments</span>`;
+    const todo=mod.segs.filter(function(s){return!s.done;});
+    const row=document.createElement('div');row.className='ri ru';
+    row.innerHTML='<div class="dot db"></div><span><b>'+mod.name+'</b> - 0/'+todo.length+' segments</span>';
     rl.appendChild(row);rl.scrollTop=rl.scrollHeight;
     let ok=0,fail=0;
     for(const seg of todo){
       try{
-        const r=await req('PUT',`https://learnerprogress.upgrad.com/progress?userId=${AUTH.userId}`,
+        const r=await req('PUT','https://learnerprogress.upgrad.com/progress?userId='+AUTH.userId,
           {completed:true,componentId:seg.id,percentComplete:100},{courseid:String(curCourseId)});
         const d=await r.json();
         if(d.completed===true||d.isSegmentComplete===true)ok++;else fail++;
-      }catch{fail++;}
-      row.querySelector('span').innerHTML=`<b>${mod.name}</b> — ${ok}/${todo.length} segments`;
-      await new Promise(r=>setTimeout(r,120));
+      }catch(e){fail++;}
+      row.querySelector('span').innerHTML='<b>'+mod.name+'</b> - '+ok+'/'+todo.length+' segments';
+      await new Promise(function(r){setTimeout(r,120);});
     }
     row.className='ri '+(fail===0?'ok':'er');
     row.innerHTML=fail===0
-      ?`<div class="dot dg"></div><span>✅ <b>${mod.name}</b> — all ${todo.length} segments complete</span>`
-      :`<div class="dot dr"></div><span>⚠️ <b>${mod.name}</b> — ${ok} ok · ${fail} failed</span>`;
+      ?'<div class="dot dg"></div><span>Done: <b>'+mod.name+'</b> - all '+todo.length+' segments complete</span>'
+      :'<div class="dot dr"></div><span>Partial: <b>'+mod.name+'</b> - '+ok+' ok, '+fail+' failed</span>';
   }
-  btn.disabled=false;btn.innerHTML='⚡ Mark Selected as Complete';
-  setTimeout(()=>{const el=document.querySelector('.course-item.sel');if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);},1000);
+  btn.disabled=false;btn.innerHTML='Mark Selected as Complete';
+  setTimeout(function(){const el=document.querySelector('.course-item.sel');if(el)selectCourse(curCourseId,document.getElementById('mod-title').textContent,el);},1000);
 }
 
-(async()=>{
+(async function(){
   if(loadAuth()&&AUTH.token){
     try{
       const r=await req('GET','https://prod-learn-api.upgrad.com/apis/v3/lms-config/me');
       if(r.ok){const me=await r.json();const u=me.user||me;AUTH.userId=String(u.id||AUTH.userId);saveAuth();document.getElementById('login-area').style.display='none';showApp(u);return;}
-    }catch{}
+    }catch(e){}
   }
 })();
 </script>
