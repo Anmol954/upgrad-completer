@@ -460,19 +460,12 @@ async function verifyOtp(){
   setLoad('ver-btn',true,'Verifying...');
   try{
     const otpNum=parseInt(otpVal,10);
-    // Attempt 1: with registrationId
-    const p1=regId?{otp:otpNum,registrationId:regId}:{otp:otpNum};
-    console.log('[CB] OTP attempt 1:',JSON.stringify(p1));
-    let r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',p1);
-    let txt=await r.text();
-    console.log('[CB] Response 1:',r.status,txt.substring(0,300));
-    // Attempt 2: without registrationId if 400
-    if(r.status===400&&regId){
-      console.log('[CB] Retrying without registrationId...');
-      r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp:otpNum});
-      txt=await r.text();
-      console.log('[CB] Response 2:',r.status,txt.substring(0,300));
-    }
+    // x-registration-id must be sent as a HEADER (not in body) - confirmed from HAR
+    const otpHeaders=regId?{'x-registration-id':regId}:{};
+    console.log('[CB] OTP payload:',JSON.stringify({otp:otpNum}),'headers:',JSON.stringify(otpHeaders));
+    const r=await req('POST','https://prod-auth-api.upgrad.com/apis/auth/v5/otp/validate',{otp:otpNum},otpHeaders);
+    const txt=await r.text();
+    console.log('[CB] OTP response:',r.status,txt.substring(0,300));
     let d={};
     try{d=JSON.parse(txt);}catch{}
     if(!r.ok)throw new Error(d.message||'Invalid OTP (server '+r.status+')');
